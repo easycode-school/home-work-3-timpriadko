@@ -11,9 +11,13 @@ function addItemInfoDecorator(target, method, descriptor) {
         let useDate = new Date();
         let date = useDate.toDateString();
         let info = this.name + " " + "-" + " " + "$" + this.price;
-        return { date, info };
+        let origResult = originalFunc.apply(this);
+        return {
+            origResult,
+            date,
+            info
+        };
     };
-    let origResult = originalFunc.apply(this);
 }
 class Item {
     constructor(name, price) {
@@ -30,6 +34,8 @@ class Item {
 __decorate([
     addItemInfoDecorator
 ], Item.prototype, "getItemInfo", null);
+let item = new Item('Apple', 100);
+console.log(item.getItemInfo());
 // 2
 function addUserDecorator(userType) {
     return function (targetClass) {

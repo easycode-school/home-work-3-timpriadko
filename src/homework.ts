@@ -5,11 +5,14 @@ function addItemInfoDecorator(target: Object, method: string, descriptor: Proper
     descriptor.value = function() {
         let useDate = new Date();
         let date = useDate.toDateString();
-        let info = this.name + " " + "-" + " " + "$" + this.price
-        return {date,info};
+        let info = this.name + " " + "-" + " " + "$" + this.price;
+        let origResult = originalFunc.apply(this);
+        return {
+            origResult,
+            date,
+            info
+        };
     }
-
-    let origResult = originalFunc.apply(this);
 }
 
 class Item {
@@ -29,6 +32,9 @@ class Item {
         };
     }
 }
+
+let item = new Item('Apple', 100);
+console.log(item.getItemInfo());
 
 // 2
 function addUserDecorator(userType: string ) {
